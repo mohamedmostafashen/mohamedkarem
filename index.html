@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>shenawy</title>
+    <title>Text Display</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sigmar&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,70 +17,39 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
             overflow: hidden;
             touch-action: manipulation;
         }
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
+        .text {
+            font-family: 'Sigmar', cursive;
+            color: red;
+            font-size: 8vw; /* الحجم متجاوب مع الشاشات */
+            text-align: center;
+            position: absolute;
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
+    <div class="text" id="displayText">I LOVE YOU</div>
 
     <script>
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drawDottedText(currentText);
-        }
+        const textElement = document.getElementById("displayText");
 
         let text1 = "I LOVE YOU";
         let text2 = "MOHAMED KAREM";
         let currentText = text1;
-        let dotSize = Math.max(canvas.width * 0.002, 2); 
-        let fontSize = Math.max(canvas.width * 0.15, 50); 
-        let dotSpacing = Math.max(canvas.width * 0.015, 8); 
-        function drawDottedText(text) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "red";
-            ctx.font = `${fontSize}px Arial`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
 
-            const x = canvas.width / 2;
-            const y = canvas.height / 2;
-
-            ctx.fillText(text, x, y);
-
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < imageData.data.length; i += 4 * dotSpacing) {
-                if (imageData.data[i + 3] > 128) {
-                    const xPos = (i / 4) % canvas.width;
-                    const yPos = Math.floor(i / 4 / canvas.width);
-                    ctx.beginPath();
-                    ctx.arc(xPos, yPos, dotSize, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
+        function updateTextSize() {
+            textElement.style.fontSize = `${Math.max(window.innerWidth * 0.1, 30)}px`;
         }
 
-        canvas.addEventListener("click", () => {
+        textElement.addEventListener("click", () => {
             currentText = currentText === text1 ? text2 : text1;
-            drawDottedText(currentText);
+            textElement.textContent = currentText;
         });
 
-        window.addEventListener("resize", resizeCanvas);
-
-        resizeCanvas();
+        window.addEventListener("resize", updateTextSize);
+        updateTextSize();
     </script>
 </body>
 </html>
